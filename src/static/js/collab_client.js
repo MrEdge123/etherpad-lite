@@ -243,16 +243,19 @@ const getCollabClient = (ace2editor, serverVars, initialUserInfo, options, _pad)
         }
       });
     } else if (msg.type === 'USER_NEWINFO') {
-      const userInfo = msg.userInfo;
-      const id = userInfo.userId;
-      if (userSet[id]) {
-        userSet[id] = userInfo;
-        callbacks.onUpdateUserInfo(userInfo);
-      } else {
-        userSet[id] = userInfo;
-        callbacks.onUserJoin(userInfo);
-      }
-      tellAceActiveAuthorInfo(userInfo);
+      const fn = () => {
+        const userInfo = msg.userInfo;
+        const id = userInfo.userId;
+        if (userSet[id]) {
+          userSet[id] = userInfo;
+          callbacks.onUpdateUserInfo(userInfo);
+        } else {
+          userSet[id] = userInfo;
+          callbacks.onUserJoin(userInfo);
+        }
+        tellAceActiveAuthorInfo(userInfo);
+      };
+      setTimeout(fn, 1000);
     } else if (msg.type === 'USER_LEAVE') {
       const userInfo = msg.userInfo;
       const id = userInfo.userId;
